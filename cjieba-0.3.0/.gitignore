@@ -2,3 +2,4 @@
 demo
 *.a
 *.swp
+*.so
