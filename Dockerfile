@@ -50,7 +50,7 @@ RUN set -ex \
 # PHPX Jieba
 RUN set -ex \
     && apk update \
-    && apk add --no-cache gcc cmake g++ make php7-dev \
+    && apk add --no-cache openssh gcc cmake g++ make php7-dev \
     # - phpx
     && cd /root \
     && git clone https://github.com/swoole/phpx.git \
