@@ -68,7 +68,9 @@ RUN set -ex \
     && ( \
         cd jieba \
         && cp -r dict /dict \
+        && cd jieba \
         && phpx build \
+        && cd .. \
         && cp -r jieba/lib/jieba.so /usr/lib/php7/modules/jieba.so \
         && cp -r 51_jieba.ini /etc/php7/conf.d \
     ) \
