@@ -27,6 +27,7 @@ RUN set -ex \
     && wget https://mirrors.aliyun.com/composer/composer.phar \
     && chmod u+x composer.phar \
     && mv composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer \
     # show php version and extensions
     && php -v \
     && php -m \
@@ -44,9 +45,9 @@ RUN set -ex \
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && echo "${TIMEZONE}" > /etc/timezone \
     # ---------- clear works ----------
-    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
-    && echo -e "\033[42;37m Build Completed :).\033[0m\n"
+    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man
 
+# PHPX Jieba
 RUN set -ex \
     && apk update \
     && apk add --no-cache gcc cmake g++ make php7-dev \
@@ -70,7 +71,10 @@ RUN set -ex \
         && phpx build \
         && cp -r jieba/lib/jieba.so /usr/lib/php7/modules/jieba.so \
         && cp -r 51_jieba.ini /etc/php7/conf.d \
-    )
+    ) \
+    # ---------- clear works ----------
+    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
+    && echo -e "\033[42;37m Build Completed :).\033[0m\n"
 
 WORKDIR /opt/www
 
