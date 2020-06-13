@@ -16,11 +16,13 @@ ARG timezone
 
 ENV TIMEZONE=${timezone:-"Asia/Shanghai"} \
     APP_ENV=prod \
+    JIEBA_VERSION="0.0.3" \
     SCAN_CACHEABLE=(true)
 
 # update
 RUN set -ex \
     && apk update \
+    && apk add --no-cache zsh openssh vim gcc cmake g++ make php7-dev \
     # install composer
     && cd /tmp \
     && wget https://mirrors.aliyun.com/composer/composer.phar \
@@ -42,6 +44,26 @@ RUN set -ex \
     # - config timezone
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && echo "${TIMEZONE}" > /etc/timezone \
+    # - phpx
+    && cd /root \
+    && git clone https://github.com/swoole/phpx.git \
+    && cd phpx \
+    && ./build.sh \
+    && mv bin/phpx /usr/local/bin/ \
+    && cmake . \
+    && make -j 4 \
+    && make install \
+    # - jieba
+    && cd /tmp \
+    && curl -SL "https://github.com/limingxinleo/phpx-jieba-ext/archive/v${JIEBA_VERSION}.tar.gz" -o jieba.tar.gz \
+    && mkdir -p jieba \
+    && tar -xf jieba.tar.gz -C jieba --strip-components=1 \
+    && ( \
+        cd jieba \
+        && cp -r dict /dict \
+        && cp -r jieba/lib/jieba-7.2.so /usr/lib/php7/modules/jieba.so \
+        && cp -r 51_jieba.ini /etc/php7/conf.d \
+    ) \
     # ---------- clear works ----------
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
