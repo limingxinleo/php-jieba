@@ -10,17 +10,16 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 namespace App\Controller;
-
+use PHPJieba;
 class IndexController extends Controller
 {
     public function index()
     {
-        $user = $this->request->input('user', 'Hyperf');
-        $method = $this->request->getMethod();
-        return $this->response->success([
-            'user' => $user,
-            'method' => $method,
-            'message' => 'Hello Hyperf.',
-        ]);
+        $key = $this->request->input('keyword');
+        if ($key) {
+            $result = PHPJieba::cut($key, true);
+        }
+
+        return $this->response->success($result);
     }
 }

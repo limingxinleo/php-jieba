@@ -1,11 +1,18 @@
 <?php
 
 declare(strict_types=1);
-
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://doc.hyperf.io
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace App\Command;
 
-use Hyperf\Command\Command as HyperfCommand;
 use Hyperf\Command\Annotation\Command;
+use Hyperf\Command\Command as HyperfCommand;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -35,8 +42,8 @@ class DebugCommand extends HyperfCommand
     {
         // $libc = \FFI::load(BASE_PATH . "/cjieba-0.3.0/lib/jieba.h");
 //         $c = \FFI::cdef(<<<CTYPE
-// Jieba NewJieba(const char* dict_path, const char* hmm_path, const char* user_dict);
-// CTYPE
+        // Jieba NewJieba(const char* dict_path, const char* hmm_path, const char* user_dict);
+        // CTYPE
 //             , BASE_PATH . "/cjieba-0.3.0/jieba.so");
         $ffi = \FFI::cdef(
             'void printf(char *const str, ...);',
