@@ -16,7 +16,8 @@ ARG timezone
 
 ENV TIMEZONE=${timezone:-"Asia/Shanghai"} \
     APP_ENV=prod \
-    JIEBA_VERSION="0.0.3" \
+    JIEBA_VERSION="1.0.0" \
+    PHPIZE_DEPS="gcc cmake g++ make php7-dev openssl" \
     SCAN_CACHEABLE=(true)
 
 # update
@@ -50,7 +51,7 @@ RUN set -ex \
 # PHPX Jieba
 RUN set -ex \
     && apk update \
-    && apk add --no-cache openssh gcc cmake g++ make php7-dev \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     # - phpx
     && cd /root \
     && git clone https://github.com/swoole/phpx.git \
@@ -75,6 +76,7 @@ RUN set -ex \
         && cp -r 51_jieba.ini /etc/php7/conf.d \
     ) \
     # ---------- clear works ----------
+    && apk del .build-deps \
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
 
