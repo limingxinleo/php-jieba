@@ -19,14 +19,20 @@ class JiebaFactory
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class)->get('jieba.dict', []);
+        $words = $container->get(ConfigInterface::class)->get('jieba.user_words', []);
 
-        var_dump(123);
-        return new \PHPJieba(
+        $jieba = new \PHPJieba(
             $config['dict'],
             $config['hmm'],
             $config['user'],
             $config['idf'],
             $config['stop_words']
         );
+
+        foreach ($words as $word) {
+            // $jieba->insert($word);
+        }
+
+        return $jieba;
     }
 }
