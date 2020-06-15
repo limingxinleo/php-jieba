@@ -14,9 +14,9 @@ namespace App\Listener;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
+use Hyperf\Framework\Event\AfterWorkerStart;
 use Hyperf\Framework\Event\BootApplication;
 use Psr\Container\ContainerInterface;
-use PHPJieba;
 
 /**
  * @Listener
@@ -36,16 +36,18 @@ class BootJiebaListener implements ListenerInterface
     public function listen(): array
     {
         return [
-            BootApplication::class,
+            AfterWorkerStart::class,
         ];
     }
 
     public function process(object $event)
     {
         $words = di()->get(ConfigInterface::class)->get('jieba.user_words');
+        $jieba = $this->container->get('PHPJieba');
+        // $jieba->insert('知我');
 
         foreach ($words as $word) {
-            PHPJieba::insertUserWord($word);
+            // $jieba->insert($word);
         }
     }
 }
