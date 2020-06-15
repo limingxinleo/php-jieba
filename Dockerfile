@@ -29,6 +29,9 @@ RUN set -ex \
     && chmod u+x composer.phar \
     && mv composer.phar /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer \
+    # install jieba
+    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.0.0/jieba-7.2.so \
+    && mv jieba-7.2.so /usr/lib/php7/modules/jieba.so \
     # show php version and extensions
     && php -v \
     && php -m \
@@ -41,44 +44,13 @@ RUN set -ex \
         echo "post_max_size=108M"; \
         echo "memory_limit=1024M"; \
         echo "date.timezone=${TIMEZONE}"; \
+        echo "extension=jieba.so"; \
     } | tee conf.d/99_overrides.ini \
     # - config timezone
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && echo "${TIMEZONE}" > /etc/timezone \
     # ---------- clear works ----------
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man
-
-# PHPX Jieba
-RUN set -ex \
-    && apk update \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-    # - phpx
-    && cd /root \
-    && git clone https://github.com/swoole/phpx.git \
-    && cd phpx \
-    && ./build.sh \
-    && mv bin/phpx /usr/local/bin/ \
-    && cmake . \
-    && make -j 4 \
-    && make install \
-    # - jieba
-    && cd /tmp \
-    && curl -SL "https://github.com/limingxinleo/phpx-jieba-ext/archive/v${JIEBA_VERSION}.tar.gz" -o jieba.tar.gz \
-    && mkdir -p jieba \
-    && tar -xf jieba.tar.gz -C jieba --strip-components=1 \
-    && ( \
-        cd jieba \
-        && cp -r dict /dict \
-        && cd jieba \
-        && phpx build \
-        && cd .. \
-        && cp -r jieba/lib/jieba.so /usr/lib/php7/modules/jieba.so \
-        && cp -r 51_jieba.ini /etc/php7/conf.d \
-    ) \
-    # ---------- clear works ----------
-    && apk del .build-deps \
-    && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
-    && echo -e "\033[42;37m Build Completed :).\033[0m\n"
 
 WORKDIR /opt/www
 

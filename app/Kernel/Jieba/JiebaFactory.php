@@ -30,7 +30,7 @@ class JiebaFactory
         );
 
         foreach ($words as $word) {
-            // $jieba->insert($word);
+            $jieba->insert($word);
         }
 
         return $jieba;

@@ -11,9 +11,10 @@ declare(strict_types=1);
  */
 namespace App\Listener;
 
+use App\Kernel\Jieba\JiebaFactory;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
-use Hyperf\Framework\Event\AfterWorkerStart;
+use Hyperf\Framework\Event\BootApplication;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -34,12 +35,18 @@ class BootJiebaListener implements ListenerInterface
     public function listen(): array
     {
         return [
-            AfterWorkerStart::class,
+            BootApplication::class,
         ];
     }
 
     public function process(object $event)
     {
         $this->container->get('PHPJieba');
+
+        // $jieba = (new JiebaFactory())($this->container);
+        //
+        // var_dump($jieba->cut('我是好人'));
+        //
+        // var_dump(123123);
     }
 }
