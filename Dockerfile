@@ -30,8 +30,8 @@ RUN set -ex \
     && mv composer.phar /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer \
     # install jieba
-    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.0.0/jieba-7.2.so \
-    && mv jieba-7.2.so /usr/lib/php7/modules/jieba.so \
+    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.0.4/jieba-7.4-alpine-v3.11.so \
+    && mv jieba-7.4-alpine-v3.11.so /usr/lib/php7/modules/jieba.so \
     # show php version and extensions
     && php -v \
     && php -m \
