@@ -16,8 +16,6 @@ ARG timezone
 
 ENV TIMEZONE=${timezone:-"Asia/Shanghai"} \
     APP_ENV=prod \
-    JIEBA_VERSION="1.0.0" \
-    PHPIZE_DEPS="gcc cmake g++ make php7-dev openssl" \
     SCAN_CACHEABLE=(true)
 
 # update
