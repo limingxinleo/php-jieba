@@ -14,14 +14,16 @@ namespace App\Kernel\Jieba;
 use Hyperf\Contract\ConfigInterface;
 use Psr\Container\ContainerInterface;
 
-class JiebaFactory
+class Jieba implements JiebaInterface
 {
-    public function __invoke(ContainerInterface $container)
+    protected $jieba;
+
+    public function __construct(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class)->get('jieba.dict', []);
         $words = $container->get(ConfigInterface::class)->get('jieba.user_words', []);
 
-        $jieba = new \PHPJieba(
+        $this->jieba = new \PHPJieba(
             $config['dict'],
             $config['hmm'],
             $config['user'],
@@ -30,9 +32,17 @@ class JiebaFactory
         );
 
         foreach ($words as $word) {
-            $jieba->insert($word);
+            $this->jieba->insert($word);
         }
+    }
 
-        return $jieba;
+    public function cut(string $keyword): array
+    {
+        return $this->jieba->cut($keyword);
+    }
+
+    public function insert(string $keyword): bool
+    {
+        return $this->jieba->insert($keyword);
     }
 }

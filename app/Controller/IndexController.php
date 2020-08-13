@@ -11,14 +11,23 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Kernel\Jieba\JiebaInterface;
+use Hyperf\Di\Annotation\Inject;
+
 class IndexController extends Controller
 {
+    /**
+     * @Inject
+     * @var JiebaInterface
+     */
+    protected $jieba;
+
     public function index()
     {
         $result = [];
         $key = $this->request->input('keyword');
         if ($key) {
-            $result = di()->get('PHPJieba')->cut($key);
+            $result = $this->jieba->cut($key);
         }
 
         return $this->response->success($result);

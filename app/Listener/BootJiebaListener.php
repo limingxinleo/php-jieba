@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Listener;
 
-use App\Kernel\Jieba\JiebaFactory;
+use App\Kernel\Jieba\JiebaInterface;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Framework\Event\BootApplication;
@@ -41,7 +41,7 @@ class BootJiebaListener implements ListenerInterface
 
     public function process(object $event)
     {
-        $this->container->get('PHPJieba');
+        $this->container->get(JiebaInterface::class);
 
         // $jieba = (new JiebaFactory())($this->container);
         //
