@@ -1,6 +1,12 @@
 # Jieba分词DEMO
 
-[扩展](https://github.com/limingxinleo/phpx-jieba-ext)
+[扩展](https://github.com/limingxinleo/php-jieba-ext)
+
+## 使用 Docker
+
+```
+docker run -p 9501:9501 limingxinleo/php-jieba:latest
+```
 
 ## 测试
 
