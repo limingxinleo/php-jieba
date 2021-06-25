@@ -1,11 +1,11 @@
 # Default Dockerfile
 #
 # @link     https://www.hyperf.io
-# @document https://doc.hyperf.io
+# @document https://hyperf.wiki
 # @contact  group@hyperf.io
-# @license  https://github.com/hyperf-cloud/hyperf/blob/master/LICENSE
+# @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
 
-FROM hyperf/hyperf:7.4-alpine-v3.11-cli
+FROM hyperf/hyperf:8.0-alpine-v3.12-swoole
 LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MIT" app.name="Hyperf"
 
 ##
@@ -21,21 +21,16 @@ ENV TIMEZONE=${timezone:-"Asia/Shanghai"} \
 # update
 RUN set -ex \
     && apk update \
-    # install composer
     && cd /tmp \
-    && wget https://mirrors.aliyun.com/composer/composer.phar \
-    && chmod u+x composer.phar \
-    && mv composer.phar /usr/local/bin/composer \
-    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer \
     # install jieba
-    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.0.4/jieba-7.4-alpine-v3.11.so \
-    && mv jieba-7.4-alpine-v3.11.so /usr/lib/php7/modules/jieba.so \
+    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.1.0/jieba-8.0-alpine-v3.12.so \
+    && mv jieba-8.0-alpine-v3.12.so /usr/lib/php8/modules/jieba.so \
     # show php version and extensions
     && php -v \
     && php -m \
     && php --ri swoole \
     #  ---------- some config ----------
-    && cd /etc/php7 \
+    && cd /etc/php8 \
     # - config PHP
     && { \
         echo "upload_max_filesize=128M"; \

@@ -12,35 +12,37 @@
     "description": "A coroutine framework that focuses on hyperspeed and flexible, specifically use for build microservices and middlewares.",
     "license": "MIT",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "ext-json": "*",
         "ext-openssl": "*",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-redis": "*",
         "ext-swoole": ">=4.5",
-        "hyperf/command": "2.0.*",
-        "hyperf/config": "2.0.*",
-        "hyperf/constants": "2.0.*",
-        "hyperf/contract": "2.0.*",
-        "hyperf/di": "2.0.*",
-        "hyperf/dispatcher": "2.0.*",
-        "hyperf/event": "2.0.*",
-        "hyperf/exception-handler": "2.0.*",
-        "hyperf/framework": "2.0.*",
-        "hyperf/http-server": "2.0.*",
-        "hyperf/logger": "2.0.*",
-        "hyperf/server": "2.0.*",
-        "hyperf/utils": "2.0.*",
-        "limingxinleo/hyperf-utils": "^2.0"
+        "hyperf/command": "2.2.*",
+        "hyperf/config": "2.2.*",
+        "hyperf/constants": "2.2.*",
+        "hyperf/contract": "2.2.*",
+        "hyperf/di": "2.2.*",
+        "hyperf/dispatcher": "2.2.*",
+        "hyperf/event": "2.2.*",
+        "hyperf/exception-handler": "2.2.*",
+        "hyperf/framework": "2.2.*",
+        "hyperf/http-server": "2.2.*",
+        "hyperf/logger": "2.2.*",
+        "hyperf/server": "2.2.*",
+        "hyperf/utils": "2.2.*",
+        "limingxinleo/hyperf-utils": "^3.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.14",
-        "hyperf/devtool": "2.0.*",
-        "hyperf/testing": "2.0.*",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "hyperf/devtool": "2.2.*",
+        "hyperf/ide-helper": "2.2.*",
+        "hyperf/testing": "2.2.*",
         "mockery/mockery": "^1.0",
         "phpstan/phpstan": "^0.12.18",
-        "swoole/ide-helper": "dev-master"
+        "swoole/ide-helper": "dev-master",
+        "symfony/var-dumper": "^5.1"
     },
     "autoload": {
         "psr-4": {
@@ -58,6 +60,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "optimize-autoloader": true,
         "sort-packages": true
     },
     "extra": [],
@@ -71,7 +74,7 @@
         "analyse": "phpstan analyse --memory-limit 512M -l 0 -c phpstan.neon ./app ./config",
         "cs-fix": "php-cs-fixer fix $1",
         "start": "php ./bin/hyperf.php start",
-        "test": "co-phpunit -c phpunit.xml --colors=always"
+        "test": "co-phpunit --prepend test/bootstrap.php -c phpunit.xml --colors=always"
     },
     "repositories": {
         "packagist": {
