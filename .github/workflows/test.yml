@@ -14,6 +14,7 @@ jobs:
       max-parallel: 6
     env:
       SW_VERSION: ${{ matrix.swoole-version }}
+      JB_VERSION: '1.1.0'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -41,6 +42,19 @@ jobs:
           sudo sh -c "echo extension=swoole > /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
           sudo sh -c "echo swoole.use_shortname='Off' >> /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
           php --ri swoole
+      - name: Setup Jieba
+        run: |
+          wget https://github.com/limingxinleo/php-jieba-ext/archive/refs/tags/v${JB_VERSION}.tar.gz -O jieba.tar.gz
+          mkdir -p jieba
+          tar -xf jieba.tar.gz -C jieba --strip-components=1
+          rm jieba.tar.gz
+          cd jieba
+          g++ -o libjieba.so -fPIC -c -DLOGGING_LEVEL=LL_WARNING -I./include/ lib/jieba.cpp
+          phpize
+          ./configure
+          make
+          sudo make install
+          sudo sh -c "echo extension=jieba.so > /etc/php/${{ matrix.php-version }}/cli/conf.d/jieba.ini"
       - name: Show Environment
         run: |
           php -v
