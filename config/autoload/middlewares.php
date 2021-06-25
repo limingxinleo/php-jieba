@@ -11,6 +11,6 @@ declare(strict_types=1);
  */
 return [
     'http' => [
-        HyperfX\Utils\Middleware\DebugMiddleware::class,
+        Han\Utils\Middleware\RequestHandledDebugMiddleware::class,
     ],
 ];
