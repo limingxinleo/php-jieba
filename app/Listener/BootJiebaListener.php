@@ -42,11 +42,5 @@ class BootJiebaListener implements ListenerInterface
     public function process(object $event)
     {
         $this->container->get(JiebaInterface::class);
-
-        // $jieba = (new JiebaFactory())($this->container);
-        //
-        // var_dump($jieba->cut('我是好人'));
-        //
-        // var_dump(123123);
     }
 }
