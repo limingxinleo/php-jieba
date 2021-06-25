@@ -64,5 +64,6 @@ jobs:
         run: composer update -o
       - name: Run Test Cases
         run: |
+          php bin/hyperf.php start &
           composer analyse
           composer test
