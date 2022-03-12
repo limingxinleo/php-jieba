@@ -45,7 +45,7 @@ jobs:
           sudo sh -c "echo extension=jieba.so > /etc/php/${{ matrix.php-version }}/cli/conf.d/jieba.ini"
       - name: Build Docker Image
         run: |
-          docker built . -t jieba
+          docker build . -t jieba
           docker run -p 9501:9501 --rm --name jieba jieba
       - name: Show Environment
         run: |
