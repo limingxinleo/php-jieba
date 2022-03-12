@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace HyperfTest\Cases;
 
 use HyperfTest\HttpTestCase;
+use PHPJieba\PHPJiebaInterface;
 
 /**
  * @internal
@@ -37,5 +38,12 @@ class JiebaTest extends HttpTestCase
 
         $this->assertSame(0, $res['code']);
         $this->assertSame(['我', '在', '中山公园', '吃', '炸鸡'], $res['data']);
+    }
+
+    public function testRPCCut()
+    {
+        $res = di()->get(PHPJiebaInterface::class)->cut('我在中山公园吃炸鸡');
+
+        $this->assertSame(['我', '在', '中山公园', '吃', '炸鸡'], $res);
     }
 }

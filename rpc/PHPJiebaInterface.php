@@ -15,7 +15,9 @@ interface PHPJiebaInterface
 {
     public const NAME = 'PHPJiebaService';
 
-    public const HOST = 'chat_api';
-
     public const PORT = 9504;
+
+    public function cut(string $keyword): array;
+
+    public function insert(string $keyword): bool;
 }

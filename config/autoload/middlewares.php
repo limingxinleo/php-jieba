@@ -13,4 +13,7 @@ return [
     'http' => [
         Han\Utils\Middleware\RequestHandledDebugMiddleware::class,
     ],
+    'rpc' => [
+        Han\Utils\Middleware\RequestHandledDebugMiddleware::class,
+    ],
 ];

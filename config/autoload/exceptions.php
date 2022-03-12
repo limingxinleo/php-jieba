@@ -14,5 +14,8 @@ return [
         'http' => [
             App\Exception\Handler\BusinessExceptionHandler::class,
         ],
+        'rpc' => [
+            App\Exception\Handler\RPCExceptionHandler::class,
+        ],
     ],
 ];
