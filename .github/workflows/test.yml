@@ -1,6 +1,6 @@
 name: PHPUnit for Hyperf
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   ci:
@@ -8,14 +8,15 @@ jobs:
     runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        php-version: ['7.3', '7.4', '8.0']
-        swoole-version: ['4.5.11', '4.6.7']
-      max-parallel: 6
+        os: [ ubuntu-latest ]
+        php-version: [ '8.0' ]
+        swoole-version: [ 'v4.5.11', 'v4.6.7', 'v4.7.1', 'v4.8.6', 'master' ]
+      max-parallel: 5
       fail-fast: false
     env:
       SW_VERSION: ${{ matrix.swoole-version }}
-      JB_VERSION: '1.1.0'
+      PHP_VERSION: ${{ matrix.php-version }}
+      JB_VERSION: '1.1.2'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,25 +25,11 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: phpize
-          ini-values: opcache.enable_cli=1
+          ini-values: opcache.enable_cli=0
           coverage: none
           extensions: pdo, pdo_mysql, redis
       - name: Setup Swoole
-        run: |
-          sudo apt-get update
-          sudo apt-get install libcurl4-openssl-dev
-          wget https://github.com/swoole/swoole-src/archive/v${SW_VERSION}.tar.gz -O swoole.tar.gz
-          mkdir -p swoole
-          tar -xf swoole.tar.gz -C swoole --strip-components=1
-          rm swoole.tar.gz
-          cd swoole
-          phpize
-          ./configure --enable-openssl --enable-http2 --enable-swoole-curl --enable-swoole-json
-          make -j$(nproc)
-          sudo make install
-          sudo sh -c "echo extension=swoole > /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
-          sudo sh -c "echo swoole.use_shortname='Off' >> /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
-          php --ri swoole
+        run: ./.github/swoole.install.sh
       - name: Setup Jieba
         run: |
           wget https://github.com/limingxinleo/php-jieba-ext/archive/refs/tags/v${JB_VERSION}.tar.gz -O jieba.tar.gz
@@ -56,6 +43,10 @@ jobs:
           make
           sudo make install
           sudo sh -c "echo extension=jieba.so > /etc/php/${{ matrix.php-version }}/cli/conf.d/jieba.ini"
+      - name: Setup MySQL ...
+        run: |
+          docker run -e TZ=Asia/Shanghai -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_ROOT_HOST=% -e MYSQL_DATABASE=hyperf -v $PWD/.github/init.sql:/docker-entrypoint-initdb.d/init.sql -d -p 3306:3306 --name mysql mysql/mysql-server:5.7
+          docker run -p 6379:6379 -d --name redis redis:latest
       - name: Show Environment
         run: |
           php -v
@@ -66,5 +57,7 @@ jobs:
       - name: Run Test Cases
         run: |
           php bin/hyperf.php start &
+          cp .env.example .env
+          vendor/bin/php-cs-fixer fix --dry-run
           composer analyse
           composer test

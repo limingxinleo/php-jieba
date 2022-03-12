@@ -12,28 +12,21 @@ declare(strict_types=1);
 namespace App\Kernel\Context;
 
 use App\Kernel\Log\AppendRequestIdProcessor;
+use Hyperf\Context\Context;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Coroutine as Co;
 use Hyperf\Utils;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 class Coroutine
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected LoggerInterface $logger;
 
-    /**
-     * @var StdoutLoggerInterface
-     */
-    protected $logger;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(protected ContainerInterface $container)
     {
-        $this->container = $container;
         $this->logger = $container->get(StdoutLoggerInterface::class);
     }
 
@@ -47,7 +40,7 @@ class Coroutine
         $coroutine = Co::create(function () use ($callable, $id) {
             try {
                 // Shouldn't copy all contexts to avoid socket already been bound to another coroutine.
-                Utils\Context::copy($id, [
+                Context::copy($id, [
                     AppendRequestIdProcessor::REQUEST_ID,
                     ServerRequestInterface::class,
                 ]);
