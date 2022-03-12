@@ -32,6 +32,7 @@ jobs:
         run: ./.github/swoole.install.sh
       - name: Setup Jieba
         run: |
+          cd /tmp
           wget https://github.com/limingxinleo/php-jieba-ext/archive/refs/tags/v${JB_VERSION}.tar.gz -O jieba.tar.gz
           mkdir -p jieba
           tar -xf jieba.tar.gz -C jieba --strip-components=1
@@ -60,3 +61,4 @@ jobs:
           vendor/bin/php-cs-fixer fix --dry-run
           composer analyse
           composer test
+          echo ${GITHUB_REF_NAME}
