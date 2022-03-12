@@ -23,8 +23,8 @@ RUN set -ex \
     && apk update \
     && cd /tmp \
     # install jieba
-    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.1.0/jieba-8.0-alpine-v3.12.so \
-    && mv jieba-8.0-alpine-v3.12.so /usr/lib/php8/modules/jieba.so \
+    && wget https://github.com/limingxinleo/php-jieba-ext/releases/download/v1.1.2/jieba-8.0-alpine-v3.15.so \
+    && mv jieba-8.0-alpine-v3.15.so /usr/lib/php8/modules/jieba.so \
     # show php version and extensions
     && php -v \
     && php -m \

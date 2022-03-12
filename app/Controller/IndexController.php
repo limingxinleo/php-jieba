@@ -16,11 +16,8 @@ use Hyperf\Di\Annotation\Inject;
 
 class IndexController extends Controller
 {
-    /**
-     * @Inject
-     * @var JiebaInterface
-     */
-    protected $jieba;
+    #[Inject]
+    protected JiebaInterface $jieba;
 
     public function index()
     {

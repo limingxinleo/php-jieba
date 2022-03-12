@@ -43,10 +43,10 @@ jobs:
           make
           sudo make install
           sudo sh -c "echo extension=jieba.so > /etc/php/${{ matrix.php-version }}/cli/conf.d/jieba.ini"
-      - name: Setup MySQL ...
+      - name: Build Docker Image
         run: |
-          docker run -e TZ=Asia/Shanghai -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_ROOT_HOST=% -e MYSQL_DATABASE=hyperf -v $PWD/.github/init.sql:/docker-entrypoint-initdb.d/init.sql -d -p 3306:3306 --name mysql mysql/mysql-server:5.7
-          docker run -p 6379:6379 -d --name redis redis:latest
+          docker built . -t jieba
+          docker run -p 9501:9501 --rm --name jieba jieba
       - name: Show Environment
         run: |
           php -v
@@ -56,7 +56,6 @@ jobs:
         run: composer update -o
       - name: Run Test Cases
         run: |
-          php bin/hyperf.php start &
           cp .env.example .env
           vendor/bin/php-cs-fixer fix --dry-run
           composer analyse
