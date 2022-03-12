@@ -13,6 +13,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Build and Publish
+        run: |
+          docker build . -t limingxinleo/php-jieba:latest
+          docker tag limingxinleo/php-jieba:latest limingxinleo/php-jieba:${GITHUB_REF_NAME}
+          docker login -u limingxinleo -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push limingxinleo/php-jieba:latest
+          docker push limingxinleo/php-jieba:${GITHUB_REF_NAME}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -23,10 +30,3 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Build
-        run: |
-          docker build . -t limingxinleo/php-jieba:latest
-          docker tag limingxinleo/php-jieba:latest limingxinleo/php-jieba:${GITHUB_REF_NAME}
-          docker login -u limingxinleo -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push limingxinleo/php-jieba:latest
-          docker push limingxinleo/php-jieba:${GITHUB_REF_NAME}
