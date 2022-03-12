@@ -23,3 +23,10 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      - name: Build
+        run: |
+          docker build . -t limingxinleo/php-jieba:latest
+          docker tag limingxinleo/php-jieba:latest limingxinleo/php-jieba:${GITHUB_REF_NAME}
+          docker login -u limingxinleo -p ${DOCKERHUB_TOKEN}
+          docker push limingxinleo/php-jieba:latest
+          docker push limingxinleo/php-jieba:${GITHUB_REF_NAME}
