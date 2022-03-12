@@ -46,7 +46,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build . -t jieba
-          docker run -p 9501:9501 -p 9504:9504 --rm --name jieba jieba
+          docker run -p 9501:9501 -p 9504:9504 --rm --name jieba -d jieba
       - name: Show Environment
         run: |
           php -v
