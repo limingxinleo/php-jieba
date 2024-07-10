@@ -25,7 +25,7 @@
         "hyperf/contract": "3.0.*",
         "hyperf/di": "3.0.*",
         "hyperf/dispatcher": "3.0.*",
-        "hyperf/engine": "^1.2",
+        "hyperf/engine": "^2.11",
         "hyperf/event": "3.0.*",
         "hyperf/exception-handler": "3.0.*",
         "hyperf/framework": "3.0.*",
